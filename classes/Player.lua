@@ -14,6 +14,10 @@ function Player:draw()
 	love.graphics.draw(TileSet, Player.image, Player.x, Player.y)
 end
 
+function Player:getTiles()
+	return self.tileX, self.tileY
+end
+
 function Player:collision(collisionMap ,dX, dY)
 	if collisionMap.data[self.tileY + dY][self.tileX + dX ] == 1 then
 		return true
