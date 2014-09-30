@@ -23,7 +23,7 @@ function Mob:draw()
 end
 
 function Mob:collision(collision, dX, dY)
-	local pTileX, pTileY = Player:getTiles()
+	local pTileX, pTileY = entityLayer.Player:getTiles()
 	if collision.data[self.yTile + dY][self.xTile + dX] == 1 or (pTileX == (self.xTile + dX) and (pTileY == (self.yTile + dY))) then 
 		return true
 	else

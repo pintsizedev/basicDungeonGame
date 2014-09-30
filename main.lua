@@ -1,4 +1,5 @@
 require("classes/Mob")
+require("classes/Mobs")
 
 local sti = require("sti")
 local Font = love.graphics.newFont("fonts/Orbitron-Regular.ttf", 18)
@@ -6,26 +7,17 @@ love.graphics.setFont(Font)
 WIDTH = 896
 HEIGHT = 640
 
-function playerSetup()
-	map:addCustomLayer("PlayerLayer", 2)
-	playerLayer = map.layers["PlayerLayer"]
-	playerLayer.Player = require("classes/Player")
-	Player = playerLayer.Player
-	function playerLayer:draw()
-		Player:draw()
+function entitySetup()
+	map:addCustomLayer("Entities", 2)
+	entityLayer = map.layers["Entities"]
+	entityLayer.Player = require("classes/Player")
+	entityLayer.Mob = Mob(32, 32)
+	Player, Mob = entityLayer.Player, entityLayer.Mob
+	function entityLayer:draw()
+		entityLayer.Player:draw()
+		entityLayer.Mob:draw()
 	end 
 end
-
-function mobSetup()
-	map:addCustomLayer("MobLayer", 3)
-	mobLayer = map.layers["MobLayer"]
-	mobLayer.Mob = Mob(32, 32)
-	Mob = mobLayer.Mob
-	function mobLayer:draw()
-		Mob:draw()
-	end
-end
-
 
 function love.load()
 	love.graphics.setBackgroundColor(47, 40, 58)
@@ -33,8 +25,7 @@ function love.load()
 	map = sti.new("maps/basic")
 	collision = map:getCollisionMap("Collision")
 	love.window.setMode(WIDTH, HEIGHT)
-	playerSetup()
-	mobSetup()
+	entitySetup()
 end
 
 function love.update(dt)
@@ -68,4 +59,7 @@ function love.draw()
 	map:draw(2, 2)
 	love.graphics.print("Player Tiles: " .. Player.tileX .. "," .. Player.tileY, 650, 10)
 	love.graphics.print("Mob tiles: " .. Mob.xTile .. "," .. Mob.yTile, 650, 30)
+	local playerCollision = map:getCollisionMap("Entities")
+	local playerCollided = playerCollision.data[Player.tileY][Player.tileX]
+	love.graphics.print("Player collided: " .. playerCollided, 650, 50)
 end
