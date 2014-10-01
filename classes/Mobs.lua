@@ -10,6 +10,30 @@ function Mobs.new()
 	local self = setmetatable({}, Mobs)
 	self.Mobs = {} -- A table of Mob objects
 	self:populate()
+	return self
+end
+
+function Mobs:update(collision)
+	for _, mob in ipairs(self.Mobs) do
+		mob:move(collision)
+	end
+end
+
+function Mobs:moveUp(collision)
+	for _, mob in ipairs(self.Mobs) do
+		mob:moveUp(collision)
+	end
+end 
+
+function Mobs:collision(newX, newY)
+	collided = false
+	for _, mob in ipairs(self.Mobs) do
+		collided = mob:collision(newX, newY)
+		if collided == true then
+			break
+		end
+	end
+	return collided
 end
 
 function Mobs:populate()
@@ -19,7 +43,15 @@ function Mobs:populate()
 end
 
 function Mobs:draw()
-	for mob in self.Mobs do
+	for _, mob in ipairs(self.Mobs) do
 		mob:draw()
 	end
 end
+
+function Mobs:printTiles()
+	height = 30
+	for i, mob in ipairs(self.Mobs) do
+		love.graphics.print("Mob "..i.." : "..mob.xTile.." , "..mob.yTile, 650, height)
+		height = height + 20
+	end
+end 

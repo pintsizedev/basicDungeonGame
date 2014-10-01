@@ -18,8 +18,17 @@ function Player:getTiles()
 	return self.tileX, self.tileY
 end
 
+function Player:collidedWith(xTile, yTile)
+	if self.tileX == xTile and self.tileY == yTile then 
+		return true
+	else
+		return false
+	end
+end
+
 function Player:collision(collisionMap ,dX, dY)
-	if collisionMap.data[self.tileY + dY][self.tileX + dX ] == 1 then
+	if collisionMap.data[self.tileY + dY][self.tileX + dX ] == 1 or 
+		Mobs:collision(self.tileX + dX, self.tileY + dY) then
 		return true
 	else
 		return false
