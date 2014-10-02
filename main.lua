@@ -6,13 +6,18 @@ local Font = love.graphics.newFont("fonts/Orbitron-Regular.ttf", 18)
 love.graphics.setFont(Font)
 WIDTH = 896
 HEIGHT = 640
+-- Set up proper random numbers
+math.randomseed(os.time())
+math.random() math.random() math.random()
 
 function entitySetup()
 	map:addCustomLayer("Entities", 2)
 	entityLayer = map.layers["Entities"]
 	entityLayer.Player = require("classes/Player")
-	entityLayer.Mobs = Mobs()
+	entityLayer.Mobs = Mobs(collision, 3)
 	Player, Mobs = entityLayer.Player, entityLayer.Mobs
+	function entityLayer:update(dt)
+	end
 	function entityLayer:draw()
 		Player:draw()
 		Mobs:draw()
@@ -22,19 +27,14 @@ end
 function love.load()
 	love.graphics.setBackgroundColor(47, 40, 58)
 	love.window.setTitle("Dungeon Game")
-	map = sti.new("maps/test")
+	map = sti.new("maps/basic")
 	collision = map:getCollisionMap("Collision")
 	love.window.setMode(WIDTH, HEIGHT)
 	entitySetup()
-	time = 0
 end
 
 function love.update(dt)
-	-- time = time + dt 
-	-- if time >= 0.5 then
-	-- 	time = 0
-	-- 	Mobs:update(collision)
-	-- end
+
 end
 
 function love.keypressed(key)
@@ -66,6 +66,5 @@ end
 function love.draw()
 	map:draw(2, 2)
 	love.graphics.print("Player Tiles: " .. Player.tileX .. "," .. Player.tileY, 650, 10)
-	Mobs:printTiles()
-	love.graphics.print(time, 200, 200)
+	Mobs:location()
 end

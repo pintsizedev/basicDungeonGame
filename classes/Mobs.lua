@@ -6,10 +6,10 @@ setmetatable(Mobs, {
 	end
 })
 
-function Mobs.new()
+function Mobs.new(collision, amount)
 	local self = setmetatable({}, Mobs)
 	self.Mobs = {} -- A table of Mob objects
-	self:populate()
+	self:populate(collision, amount)
 	return self
 end
 
@@ -36,10 +36,27 @@ function Mobs:collision(newX, newY)
 	return collided
 end
 
-function Mobs:populate()
-	self.Mobs[1] = Mob(32, 32)
-	self.Mobs[2] = Mob(48, 32)
-	self.Mobs[3] = Mob(32, 48)
+function Mobs:populate(collision, number)
+	-- get vacant spaces
+	local freeSpaces = {}
+	local mobsToAdd = {}
+	for i, row in ipairs(collision.data) do
+		for j, col in ipairs(row) do
+			if col == 0 then
+				table.insert(freeSpaces, {y= i, x=j})
+			end
+		end
+	end
+	for i = 1, number, 1 do
+		local tileIndex = math.random(0, (#freeSpaces+1))
+		local mobTile = freeSpaces[tileIndex]
+		local mobX, mobY = (mobTile.x - 1) * 16, (mobTile.y - 1) * 16
+		table.insert(mobsToAdd, Mob(mobX, mobY))
+		table.remove(freeSpaces, index)
+	end
+	for _, mob in ipairs(mobsToAdd) do
+		table.insert(self.Mobs, mob)
+	end
 end
 
 function Mobs:draw()
@@ -48,10 +65,10 @@ function Mobs:draw()
 	end
 end
 
-function Mobs:printTiles()
-	height = 30
-	for i, mob in ipairs(self.Mobs) do
-		love.graphics.print("Mob "..i.." : "..mob.xTile.." , "..mob.yTile, 650, height)
-		height = height + 20
+function Mobs:location()
+	i = 30
+	for _, mob in ipairs(self.Mobs) do
+		love.graphics.print("Mob ".._..": "..mob.x..","..mob.y, 650, i)
+		i = i + 20
 	end
-end 
+end
