@@ -2,20 +2,10 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16">
  <tileset firstgid="1" name="dungeon_sheet_0" tilewidth="16" tileheight="16">
   <image source="../images/dungeon_sheet_0.png" width="384" height="160"/>
-  <tile id="176">
-   <animation>
-    <frame tileid="176" duration="100"/>
-    <frame tileid="177" duration="100"/>
-    <frame tileid="178" duration="100"/>
-    <frame tileid="179" duration="100"/>
-    <frame tileid="180" duration="100"/>
-    <frame tileid="181" duration="100"/>
-    <frame tileid="180" duration="100"/>
-    <frame tileid="179" duration="100"/>
-    <frame tileid="178" duration="100"/>
-    <frame tileid="177" duration="100"/>
-    <frame tileid="176" duration="100"/>
-   </animation>
+  <tile id="25">
+   <properties>
+    <property name="collidable" value="true"/>
+   </properties>
   </tile>
  </tileset>
  <layer name="Floor" width="20" height="20">

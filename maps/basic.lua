@@ -25,52 +25,9 @@ return {
       properties = {},
       tiles = {
         {
-          id = 176,
-          animation = {
-            {
-              tileid = "176",
-              duration = "100"
-            },
-            {
-              tileid = "177",
-              duration = "100"
-            },
-            {
-              tileid = "178",
-              duration = "100"
-            },
-            {
-              tileid = "179",
-              duration = "100"
-            },
-            {
-              tileid = "180",
-              duration = "100"
-            },
-            {
-              tileid = "181",
-              duration = "100"
-            },
-            {
-              tileid = "180",
-              duration = "100"
-            },
-            {
-              tileid = "179",
-              duration = "100"
-            },
-            {
-              tileid = "178",
-              duration = "100"
-            },
-            {
-              tileid = "177",
-              duration = "100"
-            },
-            {
-              tileid = "176",
-              duration = "100"
-            }
+          id = 25,
+          properties = {
+            ["collidable"] = "true"
           }
         }
       }
