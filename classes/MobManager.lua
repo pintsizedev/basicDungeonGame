@@ -1,33 +1,33 @@
-Mobs = {}
-Mobs.__index = Mobs
-setmetatable(Mobs, {
+MobManager = {}
+MobManager.__index = MobManager
+setmetatable(MobManager, {
 	__call = function(cls, ...)
 		return cls.new(...)
 	end
 })
 
-function Mobs.new(collision, amount)
-	local self = setmetatable({}, Mobs)
-	self.Mobs = {} -- A table of Mob objects
+function MobManager.new(collision, amount)
+	local self = setmetatable({}, MobManager)
+	self.MobManager = {} -- A table of Mob objects
 	self:populate(collision, amount)
 	return self
 end
 
-function Mobs:update(collision)
-	for _, mob in ipairs(self.Mobs) do
+function MobManager:update(collision)
+	for _, mob in ipairs(self.MobManager) do
 		mob:move(collision)
 	end
 end
 
-function Mobs:moveUp(collision)
-	for _, mob in ipairs(self.Mobs) do
+function MobManager:moveUp(collision)
+	for _, mob in ipairs(self.MobManager) do
 		mob:moveUp(collision)
 	end
 end 
 
-function Mobs:collision(newX, newY)
+function MobManager:collision(newX, newY)
 	collided = false
-	for _, mob in ipairs(self.Mobs) do
+	for _, mob in ipairs(self.MobManager) do
 		collided = mob:collision(newX, newY)
 		if collided == true then
 			break
@@ -36,10 +36,10 @@ function Mobs:collision(newX, newY)
 	return collided
 end
 
-function Mobs:populate(collision, number)
+function MobManager:populate(collision, number)
 	-- get vacant spaces
 	local freeSpaces = {}
-	local mobsToAdd = {}
+	local MobManagerToAdd = {}
 	for i, row in ipairs(collision.data) do
 		for j, col in ipairs(row) do
 			if col == 0 then
@@ -51,23 +51,23 @@ function Mobs:populate(collision, number)
 		local tileIndex = math.random(0, (#freeSpaces+1))
 		local mobTile = freeSpaces[tileIndex]
 		local mobX, mobY = (mobTile.x - 1) * 16, (mobTile.y - 1) * 16
-		table.insert(mobsToAdd, Mob(mobX, mobY))
+		table.insert(MobManagerToAdd, Mob(mobX, mobY))
 		table.remove(freeSpaces, index)
 	end
-	for _, mob in ipairs(mobsToAdd) do
-		table.insert(self.Mobs, mob)
+	for _, mob in ipairs(MobManagerToAdd) do
+		table.insert(self.MobManager, mob)
 	end
 end
 
-function Mobs:draw()
-	for _, mob in ipairs(self.Mobs) do
+function MobManager:draw()
+	for _, mob in ipairs(self.MobManager) do
 		mob:draw()
 	end
 end
 
-function Mobs:location()
+function MobManager:location()
 	i = 30
-	for _, mob in ipairs(self.Mobs) do
+	for _, mob in ipairs(self.MobManager) do
 		love.graphics.print("Mob ".._..": "..mob.x..","..mob.y, 650, i)
 		i = i + 20
 	end

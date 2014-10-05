@@ -15,6 +15,7 @@ function Mob.new(x, y)
 	self.y = y
 	self.xTile = (x / 16) + 1
 	self.yTile = (y / 16) + 1
+	self.collison = false
 	return self
 end
 
@@ -31,10 +32,8 @@ function Mob:collision(xTile, yTile)
 end
 
 function Mob:checkCollisions(collision, dX, dY)
-	local pTileX, pTileY = entityLayer.Player:getTiles()
 	local newXTile, newYTile = self.xTile + dX, self.yTile + dY
-	if collision.data[newYTile][newXTile] == 1 or Player:collidedWith(newXTile, newYTile) or 
-	  Mobs:collision(newXTile, newYTile) then 
+	if collision.data[newYTile][newXTile] == 1 or entityLayer:checkCollision(newXTile, newYTile) then 
 		return true
 	else
 		return false
@@ -46,7 +45,6 @@ function Mob:move(collision)
 	local directions = {1, 2, 3, 4}
 	while not moved do
 		local direction = directions[math.random(0, (#directions + 1))]
-		-- local direction = 1
 		if direction == 1 then 
 			if not self:checkCollisions(collision, 1, 0) then
 				self.x = self.x + 16
