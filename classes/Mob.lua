@@ -1,6 +1,10 @@
+local TileSet = love.graphics.newImage('assets/images/dungeon_sheet_0.png')
+TileSet:setFilter('nearest','nearest')
+
 Mob = {}
 Mob.__index = Mob
 setmetatable(Mob, {
+	__index = Entity,
 	__call = function(cls, ...)
 		return cls.new(...)
 	end
@@ -8,7 +12,7 @@ setmetatable(Mob, {
 
 function Mob.new(x, y)
 	local self = setmetatable({}, Mob)
-	self.TileSet = love.graphics.newImage("images/dungeon_sheet_0.png")
+	self.TileSet = TileSet
 	self.TileSet:setFilter('nearest', 'nearest')
 	self.img = love.graphics.newQuad(320, 96, 16, 16, 384, 160)
 	self.x = x
@@ -44,7 +48,7 @@ function Mob:move(collision)
 	local moved = false
 	local directions = {1, 2, 3, 4}
 	while not moved do
-		local direction = directions[math.random(0, (#directions + 1))]
+		local direction = directions[math.random(0, #directions)]
 		if direction == 1 then 
 			if not self:checkCollisions(collision, 1, 0) then
 				self.x = self.x + 16

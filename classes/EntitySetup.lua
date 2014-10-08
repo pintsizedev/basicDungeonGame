@@ -1,8 +1,8 @@
 function entitySetup()
 	map:addCustomLayer("Entities", 2)
 	entityLayer = map.layers["Entities"]
-	entityLayer.Player = require("classes/Player")
-	entityLayer.Mobs = MobManager(collision, 5)
+	entityLayer.Player = Player(16, 32)
+	entityLayer.Mobs = MobManager(collision, 2)
 	entityLayer.Chest = Chest(32, 32)
 	Player, Mobs, Chest = entityLayer.Player, entityLayer.Mobs, entityLayer.Chest
 	function entityLayer:update(dt)
@@ -10,7 +10,7 @@ function entitySetup()
 	end 
 	function entityLayer:getCollisionInfo()
 		local collisionTiles = {}
-		table.insert(collisionTiles, {x = Player.tileX, y = Player.tileY})
+		table.insert(collisionTiles, {x = Player.xTile, y = Player.yTile})
 		for _, mob in ipairs(Mobs.MobManager) do
 			table.insert(collisionTiles, {x = mob.xTile, y = mob.yTile})
 		end
