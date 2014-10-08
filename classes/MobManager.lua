@@ -15,15 +15,9 @@ end
 
 function MobManager:update(collision)
 	for _, mob in ipairs(self.MobManager) do
-		mob:move(collision)
+		mob:update(collision)
 	end
 end
-
-function MobManager:moveUp(collision)
-	for _, mob in ipairs(self.MobManager) do
-		mob:moveUp(collision)
-	end
-end 
 
 function MobManager:collision(newX, newY)
 	collided = false
@@ -50,9 +44,8 @@ function MobManager:populate(collision, number)
 	for i = 1, number, 1 do
 		local tileIndex = math.random(0, (#freeSpaces+1))
 		local mobTile = freeSpaces[tileIndex]
-		local mobX, mobY = (mobTile.x - 1) * 16, (mobTile.y - 1) * 16
-		table.insert(MobManagerToAdd, Mob(mobX, mobY))
-		table.remove(freeSpaces, index)
+		table.insert(MobManagerToAdd, Mob(mobTile.x, mobTile.y))
+		table.remove(freeSpaces, tileIndex)
 	end
 	for _, mob in ipairs(MobManagerToAdd) do
 		table.insert(self.MobManager, mob)

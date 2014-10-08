@@ -11,22 +11,13 @@ setmetatable(Player, {
 	end
 })
 
-function Player:_init(x, y)
-	Entity._init(self, x, y, image)
+function Player:_init(xTile, yTile)
+	Entity._init(self, xTile, yTile, image)
 	self.stats = {
 		Hp = 100,
 		Strength = 1,
 		Defence = 1,
 	}
-end
-
-function Player:collision(collisionMap ,dX, dY)
-	if collisionMap.data[self.yTile + dY][self.xTile + dX ] == 1 or 
-		entityLayer:checkCollision(self.xTile + dX, self.yTile + dY) then
-		return true
-	else
-		return false
-	end
 end
 
 function Player:printHealth(width, height)

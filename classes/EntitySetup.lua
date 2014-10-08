@@ -1,33 +1,13 @@
-function entitySetup()
+function entitySetup(collision)
 	map:addCustomLayer("Entities", 2)
 	entityLayer = map.layers["Entities"]
-	entityLayer.Player = Player(16, 32)
-	entityLayer.Mobs = MobManager(collision, 2)
-	entityLayer.Chest = Chest(32, 32)
-	Player, Mobs, Chest = entityLayer.Player, entityLayer.Mobs, entityLayer.Chest
+	local entityInfo = {mobs = 2, chests = 2}
+	entityLayer.Manager = EntityManager(entityInfo, collision)
+	Player, Entities = entityLayer.Manager.Player, entityLayer.Manager
 	function entityLayer:update(dt)
-		Chest:update(dt)
-	end 
-	function entityLayer:getCollisionInfo()
-		local collisionTiles = {}
-		table.insert(collisionTiles, {x = Player.xTile, y = Player.yTile})
-		for _, mob in ipairs(Mobs.MobManager) do
-			table.insert(collisionTiles, {x = mob.xTile, y = mob.yTile})
-		end
-		table.insert(collisionTiles, {x = Chest.xTile, y = Chest.yTile})
-		return collisionTiles
+		Entities:updateChests(dt)
 	end
-	function entityLayer:checkCollision(x, y)
-		for _, entity in ipairs(entityLayer:getCollisionInfo()) do
-			if entity.x == x and entity.y == y then
-				return true
-			end
-		end
-		return false
-	end	
 	function entityLayer:draw()
-		Player:draw()
-		Mobs:draw()
-		Chest:draw()
+		Entities:draw()
 	end 
 end

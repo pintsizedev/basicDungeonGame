@@ -1,9 +1,9 @@
 require("classes/Animation")
 require("classes/Chest")
 require("classes/Entity")
+require("classes/EntityManager")
 require("classes/EntitySetup")
 require("classes/Mob")
-require("classes/MobManager")
 require("classes/Player")
 local sti = require("sti")
 
@@ -19,7 +19,7 @@ math.random() math.random() math.random()
 function newGame()
 	map = sti.new("assets/maps/basic")
 	collision = map:getCollisionMap("Collision")
-	entitySetup()
+	entitySetup(collision)
 	playing = true
 end
 
@@ -40,27 +40,23 @@ function love.keypressed(key)
 		newGame()
 	elseif playing then
 		if key == "left" and not Player:collision(collision, -1, 0) then
-			Player.x = Player.x - 16
-			Player.xTile = Player.xTile - 1
-			Mobs:update(collision)
+			Player:move(-1, 0)
+			Entities:updateMobs(collision)
 		end
 		if key == "right" and not Player:collision(collision, 1, 0) then
-			Player.x = Player.x + 16
-			Player.xTile = Player.xTile + 1
-			Mobs:update(collision)
+			Player:move(1, 0)
+			Entities:updateMobs(collision)
 		end
 		if key == "up" and not Player:collision(collision, 0, -1) then 
-			Player.y = Player.y - 16
-			Player.yTile = Player.yTile - 1
-			Mobs:update(collision)
+			Player:move(0, -1)
+			Entities:updateMobs(collision)
 		end
 		if key == "down" and not Player:collision(collision, 0, 1) then 
-			Player.y = Player.y + 16
-			Player.yTile = Player.yTile + 1
-			Mobs:update(collision)
+			Player:move(0, 1)
+			Entities:updateMobs(collision)
 		end
 		if key == "u" then
-			Mobs:update(collision)
+			Entities:updateMobs(collision)
 		end
 	end
 end
@@ -68,10 +64,6 @@ end
 function love.draw()
 	if playing then
 		map:draw(2, 2)
-		love.graphics.print(tostring(Player.x), 650, 10)
-		Player:printHealth(650, 30)
-		local pX, pY = Player:getTiles()
-		love.graphics.print("Player Tiles: "..pX.." , "..pY, 650, 50)
 	else
 		message = "Press ENTER to begin."
 		width = Font:getWidth(message)
