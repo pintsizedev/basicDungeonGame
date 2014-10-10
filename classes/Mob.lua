@@ -18,8 +18,9 @@ end
 function Mob:update(collision)
 	local moved = false
 	local directions = {1, 2, 3, 4}
+	local attempt = 1
 	while not moved do
-		local direction = directions[math.random(0, #directions)]
+		local direction = directions[math.random(1, #directions)]
 		if direction == 1 then 
 			if not self:collision(collision, 1, 0) then
 				self:move(1, 0)
@@ -42,8 +43,13 @@ function Mob:update(collision)
 			end
 		end
 		table.remove(directions, direction)
-		if #directions <= 0 then
+		attempt = attempt + 1
+		if attempt > 4 then 
 			moved = true
 		end
 	end
+end
+
+function Mob:getType()
+	return "mob"
 end

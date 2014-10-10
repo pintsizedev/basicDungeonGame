@@ -55,6 +55,12 @@ function love.keypressed(key)
 			Player:move(0, 1)
 			Entities:updateMobs(collision)
 		end
+		if key == "e" then
+			local chestLocations = Entities:getChests()
+			if #chestLocations > 0 then
+				Player:openChest(chestLocations)
+			end
+		end
 		if key == "u" then
 			Entities:updateMobs(collision)
 		end

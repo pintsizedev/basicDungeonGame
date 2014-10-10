@@ -1,6 +1,5 @@
 local TileSet = love.graphics.newImage('assets/images/dungeon_sheet_0.png')
 TileSet:setFilter('nearest','nearest')
-local Animation = Animation(TileSet, 128, 112, 6, 16, 16, 0.1)
 
 Chest = {}
 Chest.__index = Chest
@@ -16,11 +15,16 @@ setmetatable(Chest, {
 
 function Chest:_init(xTile, yTile)
 	Entity._init(self, xTile, yTile) 
-	self.animation = Animation
+	self.animation = self:newAnimation()
 end
 
 function Chest:open()
 	self.animation:startRunning()
+end
+
+function Chest:newAnimation()
+	local Animation = Animation(TileSet, 128, 112, 6, 16, 16, 0.1)
+	return Animation
 end
 
 
@@ -36,4 +40,8 @@ end
 
 function Chest:draw()
 	self.animation:draw(self.x, self.y)
+end
+
+function Chest:getType()
+	return "chest"
 end

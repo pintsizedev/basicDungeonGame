@@ -44,6 +44,19 @@ function Entity:getTiles()
 	return {x = self.xTile, y = self.yTile}
 end
 
+function Entity:checkAdjacent(xTile, yTile)
+	if self.xTile == xTile then
+		if self.yTile + 1 == yTile or self.yTile - 1 == yTile then
+			return true			
+		end
+	elseif self.yTile == yTile then
+		if self.xTile + 1 == xTile or self.xTile - 1 == xTile then
+			return true
+		end
+	end
+	return false
+end
+
 function Entity:move(dX, dY)
 	self.x, self.y = self.x + (dX * 16), self.y + (dY * 16)
 	self.xTile, self.yTile = self.xTile + dX, self.yTile + dY

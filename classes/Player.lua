@@ -30,5 +30,25 @@ end
 
 function Player:heal(amount)
 	self.stats.Hp = self.stats.Hp + amount
+end
 
+function Player:openChest(chests)
+	local opened = false
+	local i = 1
+	while not opened do
+		local chestTiles = chests[i]:getTiles()
+		local isAdjacent = self:checkAdjacent(chestTiles.x, chestTiles.y)
+		if isAdjacent and not chests[i].isOpen then
+			chests[i]:open()
+			opened = true
+		end
+		i = i + 1
+		if i > #chests then
+			opened = true
+		end
+	end
+end
+
+function Player:getType()
+	return "player"
 end

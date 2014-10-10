@@ -19,6 +19,7 @@ function Animation.new(tileSet, startX, startY, frames, width, height, delay)
 	self.width = width
 	self.delay = delay
 	self.timer = 0
+	self.hasRun = false
 	self.running = false
 	self.mode = 1
 	return self
@@ -39,6 +40,7 @@ end
 function Animation:once()
 	if self.currentFrame >= self.frames then
 		self.running = false
+		self.hasRun = true
 	else
 		self.currentFrame = self.currentFrame + 1
 		self.imageX = self.imageX + self.dx
@@ -66,6 +68,10 @@ end
 
 function Animation:startRunning()
 	self.running = true
+end
+
+function Animation:finishedRunning()
+	return self.hasRun()
 end
 
 function Animation:isRunning()

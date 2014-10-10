@@ -11,7 +11,7 @@ setmetatable(EntityManager, {
 
 -- @param entityTable = Table containing how many of each entity
 function EntityManager:_init(entityTable, collision)
-	self.Player = Player(2, 3)
+	self.Player = nil
 	self.Mobs = {}
 	self.Chests = {}
 	self:populate(entityTable, collision)
@@ -31,14 +31,18 @@ end
 
 function EntityManager:populate(entityTable, collision)
 	local freeSpaces = get_free_spaces(collision) 
+	local tileIndex = math.random(1, (#freeSpaces))
+	local playerTile = freeSpaces[tileIndex]
+	self.Player = Player(playerTile.x, playerTile.y)
+	table.remove(freeSpaces, tileIndex)
 	for i = 1, entityTable.mobs, 1 do
-		local tileIndex = math.random(0, (#freeSpaces))
+		local tileIndex = math.random(1, (#freeSpaces))
 		local mobTile = freeSpaces[tileIndex]
 		table.insert(self.Mobs, Mob(mobTile.x, mobTile.y))
 		table.remove(freeSpaces, tileIndex)
 	end
 	for i = 1, entityTable.chests, 1 do
-		local tileIndex = math.random(0, (#freeSpaces))
+		local tileIndex = math.random(1, (#freeSpaces))
 		local chestTile = freeSpaces[tileIndex]
 		table.insert(self.Chests, Chest(chestTile.x, chestTile.y))
 		table.remove(freeSpaces, tileIndex)
@@ -83,8 +87,33 @@ function EntityManager:updateMobs(collision)
 	end 
 end
 
-function EntityManager:updateChests(dt)
+function EntityManager:getChests()
+	return self.Chests 
+end 
+
+function EntityManager:getEntity(xTile, yTile)
+	if self.Player.xTile == xTile and self.Player.yTile == yTile then
+		return self.Player
+	end
+	for _, mob in ipairs(self.Mobs) do
+		if mob.xTile == xTile and mob.yTile == yTile then
+			return mob
+		end
+	end
 	for _, chest in ipairs(self.Chests) do
-		chest:update(dt)
+		if chest.xTile == xTile and chest.yTile == yTile then
+			return chest
+		end
+	end
+	return nil
+end
+
+function EntityManager:updateChests(dt)
+	for i, chest in ipairs(self.Chests) do
+		if not chest.animation.hasRun then
+			chest:update(dt)
+		else
+			table.remove(self.Chests, i)
+		end
 	end 
 end
