@@ -7,7 +7,7 @@ local function entitySetup(collision)
 	entityLayer.Manager = EntityManager(entityInfo, collision)
 	Player, Entities = entityLayer.Manager.Player, entityLayer.Manager
 	function entityLayer:update(dt)
-		Entities:updateChests(dt)
+		Entities:update(dt)
 	end
 	function entityLayer:draw()
 		Entities:draw()
@@ -17,6 +17,7 @@ end
 function game:enter(previous)
 	map = sti.new("assets/maps/basic")
 	collision = map:getCollisionMap("Collision")
+	BootyRegister = require("classes/BootyRegister")
 	entitySetup(collision)
 end
 
@@ -55,6 +56,7 @@ end
 
 function game:draw()
 	map:draw(2, 2)
+	Player:printInfo(10)
 end
 
 return game

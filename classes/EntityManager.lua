@@ -14,6 +14,7 @@ function EntityManager:_init(entityTable, collision)
 	self.Player = nil
 	self.Mobs = {}
 	self.Chests = {}
+	self.Booty = {}
 	self:populate(entityTable, collision)
 end
 
@@ -79,6 +80,9 @@ function EntityManager:draw()
 	for _, chest in ipairs(self.Chests) do
 		chest:draw()
 	end
+	for _, booty in ipairs(self.Booty) do
+		booty:draw()
+	end
 end
 
 function EntityManager:updateMobs(collision)
@@ -105,15 +109,35 @@ function EntityManager:getEntity(xTile, yTile)
 			return chest
 		end
 	end
+	for _, booty in ipairs(self.Booty) do
+		if booty.xTile == xTile and booty.yTile == yTile then
+			return booty
+		end
+	end
 	return nil
 end
 
-function EntityManager:updateChests(dt)
+function EntityManager:addBooty(chest)
+	local booty = chest:dropBooty()
+	table.insert(self.Booty, booty)
+end
+
+function EntityManager:update(dt)
+	self.Player:checkForBooty(self.Booty)
 	for i, chest in ipairs(self.Chests) do
 		if not chest.animation.hasRun then
 			chest:update(dt)
 		else
+			self:addBooty(chest)
 			table.remove(self.Chests, i)
 		end
 	end 
+	for i, booty in ipairs(self.Booty) do
+		if not booty.animation.hasRun then
+			booty:update(dt)
+		end
+		if booty.pickedUp then
+			table.remove(self.Booty, i) 
+		end
+	end
 end

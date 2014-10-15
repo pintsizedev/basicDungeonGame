@@ -1,6 +1,7 @@
 Font = love.graphics.newFont("assets/fonts/Orbitron-Regular.ttf", 18)
 love.graphics.setFont(Font)
 require("classes/Animation")
+require("classes/Booty")
 require("classes/Chest")
 require("classes/Entity")
 require("classes/EntityManager")

@@ -42,6 +42,12 @@ function Chest:draw()
 	self.animation:draw(self.x, self.y)
 end
 
+function Chest:dropBooty()
+	local item = BootyRegister[math.random(1, #BootyRegister)]
+	local newBooty = Booty(item.details, self.xTile, self.yTile, item.image)
+	return newBooty
+end
+
 function Chest:getType()
 	return "chest"
 end

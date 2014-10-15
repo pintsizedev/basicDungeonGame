@@ -18,6 +18,7 @@ function Player:_init(xTile, yTile)
 		Strength = 1,
 		Defence = 1,
 	}
+	self.inventory = {}
 end
 
 function Player:printHealth(width, height)
@@ -49,6 +50,41 @@ function Player:openChest(chests)
 	end
 end
 
+function Player:checkForBooty(Booty)
+	for _, booty in ipairs(Booty) do
+		if self.xTile == booty.xTile and self.yTile == booty.yTile then
+			self:pickUpBooty(booty)
+		end
+	end
+end
+
+function Player:pickUpBooty(Booty)
+	table.insert(self.inventory, Booty)
+	Booty:pickUp()
+	self:updateStats(Booty)
+end
+
+function Player:updateStats(booty)
+	if booty.details.modifies == "defence" then
+		self.stats.Defence = self.stats.Defence + booty.details.difference
+	elseif booty.details.modifies == "strength" then
+		self.stats.Strength = self.stats.Strength + booty.details.difference
+	end
+end
+
 function Player:getType()
 	return "player"
+end
+
+function Player:printInfo(startY)
+	y = startY
+	local heartImg = love.graphics.newImage("assets/images/heart.png")
+	love.graphics.draw(heartImg, 650, y)
+	love.graphics.print(tostring(self.stats.Hp), 670, y)
+	y = y + 20
+	for i=1,#self.inventory do
+		local booty = self.inventory[i]
+		love.graphics.print(booty.details.name.." : "..booty.details.description, 650, y)
+		y = y + 20
+	end
 end
