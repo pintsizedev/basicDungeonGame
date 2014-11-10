@@ -76,6 +76,7 @@ function EntityManager:draw()
 	self.Player:draw()
 	for _, mob in ipairs(self.Mobs) do
 		mob:draw()
+		mob:drawHealthBar()
 	end
 	for _, chest in ipairs(self.Chests) do
 		chest:draw()

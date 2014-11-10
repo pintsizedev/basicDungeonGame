@@ -13,6 +13,7 @@ setmetatable(Mob, {
 
 function Mob:_init(xTile, yTile)
 	Entity._init(self, xTile, yTile, image)
+	self.hp = 20
 end
 
 function Mob:update(collision)
@@ -48,6 +49,17 @@ function Mob:update(collision)
 			moved = true
 		end
 	end
+end
+
+function Mob:drawHealthBar()
+	local hp = self.hp
+	local barCoords = {x = self.x, y = self.y - 6}
+	local barColour = {x = self.x + 1, y = self.y - 5, width = math.ceil((self.hp/20) *  14)}
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.rectangle("line", barCoords.x, barCoords.y, 16, 4)
+	love.graphics.setColor(255, 0, 0)
+	love.graphics.rectangle("fill", barColour.x, barColour.y, barColour.width, 2)
+	love.graphics.setColor(255, 255, 255)
 end
 
 function Mob:getType()

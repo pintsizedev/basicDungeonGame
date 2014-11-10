@@ -12,6 +12,8 @@ Gamestate = require("hump.gamestate")
 menu = require("gamestates/menu")
 game = require("gamestates/game")
 
+MAP_SCALE_X = 2
+MAP_SCALE_Y = 2
 WIDTH = 896
 HEIGHT = 640
 -- Set up proper random numbers

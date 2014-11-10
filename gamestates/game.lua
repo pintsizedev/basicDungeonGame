@@ -1,9 +1,11 @@
 local game = {}
-
+local printx = 0
+local printy = 0
+local contents = "nil"
 local function entitySetup(collision)
 	map:addCustomLayer("Entities", 2)
 	entityLayer = map.layers["Entities"]
-	local entityInfo = {mobs = 2, chests = 2}
+	local entityInfo = {mobs = 5, chests = 5}
 	entityLayer.Manager = EntityManager(entityInfo, collision)
 	Player, Entities = entityLayer.Manager.Player, entityLayer.Manager
 	function entityLayer:update(dt)
@@ -12,6 +14,22 @@ local function entitySetup(collision)
 	function entityLayer:draw()
 		Entities:draw()
 	end 
+end
+
+function game:convertMouseToTile(x, y)
+	xTile = math.floor(x / (16 * MAP_SCALE_X)) + 1
+	yTile = math.floor(y / (16 * MAP_SCALE_Y)) + 1
+	return xTile, yTile
+end
+
+function game:drawSelectedtile()
+	love.graphics.setColor(255, 255, 255)
+	local x, y = love.mouse:getPosition()
+	if x <= (320 * MAP_SCALE_X) and y <= (320 * MAP_SCALE_Y) then
+		local x = x - (x % (16 * MAP_SCALE_X))
+		local y = y - (y % (16 * MAP_SCALE_Y))
+		love.graphics.rectangle("line", x, y, (16 * MAP_SCALE_X), (16 * MAP_SCALE_Y))
+	end
 end
 
 function game:enter(previous)
@@ -24,6 +42,24 @@ end
 
 function game:update(dt)
 	map:update(dt)
+end
+
+function game:mousepressed(x, y, button)
+	if button == "l" then
+		xTile, yTile = self:convertMouseToTile(x, y)
+		-- Following two lines for debug reasons
+		printx, printy = self:convertMouseToTile(x, y)
+		contents = Entities:getEntity(xTile, yTile)
+		if contents then 
+			contents = contents:getType()
+		end
+		if Player:checkAdjacent(xTile, yTile) and Entities:getEntity(xTile, yTile) then
+			local tileContents = Entities:getEntity(xTile, yTile)
+			if tileContents:getType() == "chest" then
+				tileContents:open()
+			end
+		end
+	end
 end
 
 function game:keypressed(key)
@@ -55,8 +91,12 @@ function game:keypressed(key)
 end
 
 function game:draw()
-	map:draw(2, 2)
-	Player:printInfo(10)
+	map:draw(MAP_SCALE_X, MAP_SCALE_Y)
+	self:drawSelectedtile()
+	love.graphics.print(printx .. ","..printy, 650, 10)
+	love.graphics.print(tostring(contents), 650, 30)
+	Player:printInfo(50)
+
 end
 
 return game

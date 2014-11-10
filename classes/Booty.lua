@@ -35,3 +35,7 @@ end
 function Booty:draw()
 	self.animation:draw(self.x, self.y)
 end
+
+function Booty:getType()
+	return "booty"
+end
